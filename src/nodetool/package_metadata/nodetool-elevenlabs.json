@@ -1,0 +1,228 @@
+{
+  "name": "nodetool-elevenlabs",
+  "description": "Nodetool ElevenLabs nodes",
+  "version": "0.1.0",
+  "authors": [
+    "Matthias Georgi <matti.georgi@gmail.com>"
+  ],
+  "repo_id": "nodetool-ai/nodetool-elevenlabs",
+  "nodes": [
+    {
+      "title": "Text To Speech",
+      "description": "Generate natural-sounding speech using ElevenLabs' advanced text-to-speech technology. Features multiple voices and customizable parameters.\n    audio, tts, speech, synthesis, voice\n\n    Use cases:\n    - Create professional voiceovers\n    - Generate character voices\n    - Produce multilingual content\n    - Create audiobooks\n    - Generate voice content",
+      "namespace": "elevenlabs.text_to_speech",
+      "node_type": "elevenlabs.text_to_speech.TextToSpeech",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Aria (American female, expressive)",
+              "Roger (American male, confident)",
+              "Sarah (American female, soft)",
+              "Laura (American female, upbeat)",
+              "Charlie (Australian male, natural)",
+              "George (British male, warm)",
+              "Callum (Transatlantic male, intense)",
+              "River (American non-binary, confident)",
+              "Liam (American male, articulate)",
+              "Charlotte (Swedish female, seductive)",
+              "Alice (British female, confident)",
+              "Will (American male, friendly)",
+              "Jessica (American female, expressive)",
+              "Eric (American male, friendly)",
+              "Chris (American male, casual)",
+              "Brian (American male, deep)",
+              "Daniel (British male, authoritative)",
+              "Lily (British female, warm)",
+              "Bill (American male, trustworthy)"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.VoiceIDEnum"
+          },
+          "default": "Aria (American female, expressive)",
+          "title": "Voice",
+          "description": "Voice ID to be used for generation"
+        },
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "Hello, how are you?",
+          "title": "Text",
+          "description": "The text to convert to speech"
+        },
+        {
+          "name": "tts_model_id",
+          "type": {
+            "type": "enum",
+            "values": [
+              "eleven_multilingual_v2",
+              "eleven_turbo_v2_5",
+              "eleven_flash_v2_5",
+              "eleven_turbo_v2",
+              "eleven_flash_v2",
+              "eleven_multilingual_sts_v2",
+              "eleven_english_sts_v2",
+              "eleven_monolingual_v1",
+              "eleven_multilingual_v1"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.ModelID"
+          },
+          "default": "eleven_monolingual_v1",
+          "title": "Tts Model Id",
+          "description": "The TTS model to use for generation"
+        },
+        {
+          "name": "voice_settings",
+          "type": {
+            "type": "dict"
+          },
+          "title": "Voice Settings",
+          "description": "Optional voice settings to override defaults"
+        },
+        {
+          "name": "language_code",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "en",
+              "ja",
+              "zh",
+              "de",
+              "hi",
+              "fr",
+              "ko",
+              "pt",
+              "it",
+              "es",
+              "ru",
+              "id",
+              "nl",
+              "tr",
+              "fil",
+              "pl",
+              "sv",
+              "bg",
+              "ro",
+              "ar",
+              "cs",
+              "el",
+              "fi",
+              "hr",
+              "ms",
+              "sk",
+              "da",
+              "ta",
+              "uk",
+              "vi",
+              "no",
+              "hu"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.LanguageID"
+          },
+          "default": "none",
+          "title": "Language Code",
+          "description": "Language code to enforce (only works with Turbo v2.5)"
+        },
+        {
+          "name": "optimize_streaming_latency",
+          "type": {
+            "type": "int"
+          },
+          "default": 2,
+          "title": "Optimize Streaming Latency",
+          "description": "Latency optimization level (0-4). Higher values trade quality for speed",
+          "min": 0.0,
+          "max": 4.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Seed for deterministic generation (0-4294967295). -1 means random",
+          "min": -1.0,
+          "max": 4294967295.0
+        },
+        {
+          "name": "text_normalization",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "on",
+              "off"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.TextNormalization"
+          },
+          "default": "auto",
+          "title": "Text Normalization",
+          "description": "Controls text normalization behavior"
+        },
+        {
+          "name": "stability",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.5,
+          "title": "Stability",
+          "description": "Voice stability (0-1). Higher values make output more consistent, lower values more varied",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "similarity_boost",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.75,
+          "title": "Similarity Boost",
+          "description": "Similarity to original voice (0-1). Higher values make output closer to original voice",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "style",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Style",
+          "description": "Speaking style emphasis (0-1). Higher values increase style expression",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "use_speaker_boost",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Use Speaker Boost",
+          "description": "Whether to use speaker boost for clearer, more consistent output"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "voice",
+        "text"
+      ],
+      "is_dynamic": false
+    }
+  ]
+}
