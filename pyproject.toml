@@ -10,7 +10,7 @@ readme = "README.md"
 authors = ["Matthias Georgi <matti.georgi@gmail.com>"]
 packages = [{ include = "nodetool", from = "src" }]
 package-mode = true
-include = ["src/nodetool/package-metadata/nodetool-elevenlabs.json"]
+include = ["src/nodetool/package_metadata/nodetool-elevenlabs.json"]
 repository = "https://github.com/nodetool-ai/nodetool-elevenlabs"
 
 [tool.poetry.dependencies]
