@@ -7,32 +7,18 @@ name = "nodetool-elevenlabs"
 version = "0.1.0"
 description = "Nodetool ElevenLabs nodes"
 readme = "README.md"
-authors = [
-    {name = "Matthias Georgi", email = "matti.georgi@gmail.com"}
-]
+authors = [{ name = "Matthias Georgi", email = "matti.georgi@gmail.com" }]
 requires-python = ">=3.11"
 
-dependencies = [
-    "nodetool-core>=0.6.0,<0.7.0",
-    "elevenlabs",
-]
+dependencies = ["nodetool-core>=0.6.0,<0.7.0", "elevenlabs"]
 
 
 [project.optional-dependencies]
-# For development with local nodetool-core
-dev = [
-    "nodetool-core @ file:///../nodetool-core",
-]
 # For exact version pinning in production
-stable = [
-    "nodetool-core==0.6.0",
-]
+stable = ["nodetool-core==0.6.0"]
 
 [tool.hatch.metadata]
-allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/nodetool"]
-artifacts = [
-    "src/nodetool/package_metadata/nodetool-elevenlabs.json",
-]
+artifacts = ["src/nodetool/package_metadata/nodetool-elevenlabs.json"]
