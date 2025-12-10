@@ -1,18 +1,17 @@
 {
   "name": "nodetool-elevenlabs",
   "description": "Nodetool ElevenLabs nodes",
-  "version": "0.1.0",
+  "version": "0.6.2-rc9",
   "authors": [
     "Matthias Georgi <matti.georgi@gmail.com>"
   ],
-  "repo_id": "nodetool-ai/nodetool-elevenlabs",
+  "repo_id": "",
   "nodes": [
     {
       "title": "Text To Speech",
       "description": "Generate natural-sounding speech using ElevenLabs' advanced text-to-speech technology. Features multiple voices and customizable parameters.\n    audio, tts, speech, synthesis, voice\n\n    Use cases:\n    - Create professional voiceovers\n    - Generate character voices\n    - Produce multilingual content\n    - Create audiobooks\n    - Generate voice content",
       "namespace": "elevenlabs.text_to_speech",
       "node_type": "elevenlabs.text_to_speech.TextToSpeech",
-      "layout": "default",
       "properties": [
         {
           "name": "voice",
@@ -80,6 +79,7 @@
           "type": {
             "type": "dict"
           },
+          "default": null,
           "title": "Voice Settings",
           "description": "Optional voice settings to override defaults"
         },
@@ -216,13 +216,10 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "voice",
         "text"
-      ],
-      "is_dynamic": false
+      ]
     }
   ]
 }
