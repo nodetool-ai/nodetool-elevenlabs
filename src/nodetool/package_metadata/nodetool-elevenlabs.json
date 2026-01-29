@@ -1,12 +1,242 @@
 {
   "name": "nodetool-elevenlabs",
   "description": "Nodetool ElevenLabs nodes",
-  "version": "0.6.2-rc.19",
+  "version": "0.6.3-rc.10",
   "authors": [
     "Matthias Georgi <matti.georgi@gmail.com>"
   ],
   "repo_id": "",
   "nodes": [
+    {
+      "title": "Realtime Text To Speech",
+      "description": "Stream text-to-speech using ElevenLabs WebSocket API. Consumes text chunks and outputs audio chunks in real-time.\n    audio, tts, speech, streaming, realtime, websocket\n\n    Use cases:\n    - Real-time voice generation from streaming text\n    - Interactive voice applications\n    - Low-latency text-to-speech conversion\n    - Streaming dialogue generation",
+      "namespace": "elevenlabs.text_to_speech",
+      "node_type": "elevenlabs.text_to_speech.RealtimeTextToSpeech",
+      "properties": [
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Aria (American female, expressive)",
+              "Roger (American male, confident)",
+              "Sarah (American female, soft)",
+              "Laura (American female, upbeat)",
+              "Charlie (Australian male, natural)",
+              "George (British male, warm)",
+              "Callum (Transatlantic male, intense)",
+              "River (American non-binary, confident)",
+              "Liam (American male, articulate)",
+              "Charlotte (Swedish female, seductive)",
+              "Alice (British female, confident)",
+              "Will (American male, friendly)",
+              "Jessica (American female, expressive)",
+              "Eric (American male, friendly)",
+              "Chris (American male, casual)",
+              "Brian (American male, deep)",
+              "Daniel (British male, authoritative)",
+              "Lily (British female, warm)",
+              "Bill (American male, trustworthy)"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.VoiceIDEnum"
+          },
+          "default": "Aria (American female, expressive)",
+          "title": "Voice",
+          "description": "Voice ID to be used for generation"
+        },
+        {
+          "name": "chunk",
+          "type": {
+            "type": "chunk"
+          },
+          "default": {
+            "type": "chunk",
+            "node_id": null,
+            "thread_id": null,
+            "workflow_id": null,
+            "content_type": "text",
+            "content": "",
+            "content_metadata": {},
+            "done": false,
+            "thinking": false
+          },
+          "title": "Chunk",
+          "description": "The text chunk to use as input."
+        },
+        {
+          "name": "model_id",
+          "type": {
+            "type": "enum",
+            "values": [
+              "eleven_multilingual_v2",
+              "eleven_turbo_v2_5",
+              "eleven_flash_v2_5",
+              "eleven_turbo_v2",
+              "eleven_flash_v2",
+              "eleven_multilingual_sts_v2",
+              "eleven_english_sts_v2",
+              "eleven_monolingual_v1",
+              "eleven_multilingual_v1"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.ModelID"
+          },
+          "default": "eleven_turbo_v2_5",
+          "title": "Model Id",
+          "description": "The TTS model to use for generation"
+        },
+        {
+          "name": "language_code",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "en",
+              "ja",
+              "zh",
+              "de",
+              "hi",
+              "fr",
+              "ko",
+              "pt",
+              "it",
+              "es",
+              "ru",
+              "id",
+              "nl",
+              "tr",
+              "fil",
+              "pl",
+              "sv",
+              "bg",
+              "ro",
+              "ar",
+              "cs",
+              "el",
+              "fi",
+              "hr",
+              "ms",
+              "sk",
+              "da",
+              "ta",
+              "uk",
+              "vi",
+              "no",
+              "hu"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.LanguageID"
+          },
+          "default": "none",
+          "title": "Language Code",
+          "description": "Language code to enforce (only works with Turbo v2.5)"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "mp3_22050_32",
+              "mp3_44100_32",
+              "mp3_44100_64",
+              "mp3_44100_96",
+              "mp3_44100_128",
+              "mp3_44100_192",
+              "pcm_8000",
+              "pcm_16000",
+              "pcm_22050",
+              "pcm_24000",
+              "pcm_44100",
+              "ulaw_8000",
+              "alaw_8000",
+              "opus_48000_32",
+              "opus_48000_64",
+              "opus_48000_96",
+              "opus_48000_128",
+              "opus_48000_192"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.text_to_speech.OutputFormat"
+          },
+          "default": "mp3_44100_128",
+          "title": "Output Format",
+          "description": "Audio output format for streaming"
+        },
+        {
+          "name": "stability",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.5,
+          "title": "Stability",
+          "description": "Voice stability (0-1). Higher values make output more consistent",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "similarity_boost",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.75,
+          "title": "Similarity Boost",
+          "description": "Similarity to original voice (0-1)",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "style",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Style",
+          "description": "Speaking style emphasis (0-1)",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "use_speaker_boost",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Use Speaker Boost",
+          "description": "Whether to use speaker boost for clearer output"
+        },
+        {
+          "name": "speed",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Speed",
+          "description": "Speed of the generated speech (0.7-1.2)",
+          "min": 0.7,
+          "max": 1.2
+        },
+        {
+          "name": "enable_ssml_parsing",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Ssml Parsing",
+          "description": "Enable SSML parsing in text input"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "chunk"
+          },
+          "name": "chunk"
+        }
+      ],
+      "basic_fields": [
+        "voice",
+        "chunk",
+        "model_id"
+      ],
+      "is_streaming_output": true
+    },
     {
       "title": "Text To Speech",
       "description": "Generate natural-sounding speech using ElevenLabs' advanced text-to-speech technology. Features multiple voices and customizable parameters.\n    audio, tts, speech, synthesis, voice\n\n    Use cases:\n    - Create professional voiceovers\n    - Generate character voices\n    - Produce multilingual content\n    - Create audiobooks\n    - Generate voice content",

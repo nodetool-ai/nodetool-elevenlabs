@@ -171,7 +171,7 @@ class TextToSpeech(BaseNode):
         description="The TTS model to use for generation",
     )
     voice_settings: dict = Field(
-        default=None,
+        default={},
         description="Optional voice settings to override defaults",
     )
     language_code: LanguageID = Field(
@@ -218,9 +218,7 @@ class TextToSpeech(BaseNode):
     )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
-        api_key = context.environment.get("ELEVENLABS_API_KEY")
-        if not api_key:
-            raise ValueError("ELEVENLABS_API_KEY is required")
+        api_key = await context.get_secret_required("ELEVENLABS_API_KEY")
 
         voice_id = VOICE_ID_MAPPING[self.voice]
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
@@ -414,6 +412,37 @@ class RealtimeTextToSpeech(BaseNode):
         """
         log.debug("Consumer loop started")
 
+        # Extract audio format info from output_format
+        format_str = self.output_format.value
+        
+        # Determine sample rate and encoding from format string
+        if format_str.startswith("pcm_"):
+            sample_rate = int(format_str.split("_")[1])
+            encoding = "pcm16"
+        elif format_str.startswith("mp3_"):
+            sample_rate = int(format_str.split("_")[1])
+            encoding = "mp3"
+        elif format_str.startswith("opus_"):
+            sample_rate = int(format_str.split("_")[1])
+            encoding = "opus"
+        elif format_str.startswith("ulaw_"):
+            sample_rate = int(format_str.split("_")[1])
+            encoding = "ulaw"
+        elif format_str.startswith("alaw_"):
+            sample_rate = int(format_str.split("_")[1])
+            encoding = "alaw"
+        else:
+            sample_rate = 44100
+            encoding = "unknown"
+        
+        # Prepare metadata for audio chunks
+        audio_metadata = {
+            "sample_rate": sample_rate,
+            "channels": 1,  # ElevenLabs uses mono by default
+            "encoding": encoding,
+            "format": format_str,
+        }
+
         async for message in websocket:
             try:
                 data = json.loads(message)
@@ -423,7 +452,13 @@ class RealtimeTextToSpeech(BaseNode):
                 if data.get("isFinal"):
                     log.info("Received final message, ending stream")
                     await outputs.emit(
-                        "chunk", Chunk(content="", done=True, content_type="audio")
+                        "chunk", 
+                        Chunk(
+                            content="", 
+                            done=True, 
+                            content_type="audio",
+                            content_metadata=audio_metadata,
+                        )
                     )
                     break
 
@@ -438,6 +473,7 @@ class RealtimeTextToSpeech(BaseNode):
                                 content=audio_b64,
                                 done=False,
                                 content_type="audio",
+                                content_metadata=audio_metadata,
                             ),
                         )
 
@@ -465,9 +501,7 @@ class RealtimeTextToSpeech(BaseNode):
         """
         import websockets
 
-        api_key = context.environment.get("ELEVENLABS_API_KEY")
-        if not api_key:
-            raise ValueError("ELEVENLABS_API_KEY is required")
+        api_key = await context.get_secret_required("ELEVENLABS_API_KEY")
 
         voice_id = VOICE_ID_MAPPING[self.voice]
 
@@ -491,7 +525,7 @@ class RealtimeTextToSpeech(BaseNode):
         headers = {"xi-api-key": api_key}
 
         try:
-            async with websockets.connect(ws_url, extra_headers=headers) as websocket:
+            async with websockets.connect(ws_url, additional_headers=headers) as websocket:  # ty:ignore[invalid-argument-type]
                 log.info("Connected to ElevenLabs WebSocket")
 
                 # Send initialization message with voice settings
@@ -506,6 +540,7 @@ class RealtimeTextToSpeech(BaseNode):
                 init_message = {
                     "text": " ",  # Must be a single space for initialization
                     "voice_settings": voice_settings,
+                    "xi_api_key": api_key,  # API key is also required in the first frame
                 }
 
                 log.debug("Sending initialization message")
