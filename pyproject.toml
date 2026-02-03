@@ -21,4 +21,6 @@ stable = ["nodetool-core==0.6.3-rc.13"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/nodetool"]
-artifacts = ["src/nodetool/package_metadata/nodetool-elevenlabs.json", "package_metadata/nodetool-elevenlabs.json"]
+include = [
+    "src/nodetool/package_metadata/*.json",
+]
