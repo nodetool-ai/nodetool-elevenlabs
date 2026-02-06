@@ -8,6 +8,144 @@
   "repo_id": "",
   "nodes": [
     {
+      "title": "Realtime Speech To Text",
+      "description": "Realtime speech-to-text transcription using ElevenLabs WebSocket API.\n    \n    Streams audio chunks in and receives transcription results in real-time.\n    Supports both manual commit and voice activity detection (VAD) modes.\n    \n    Use this node with:\n    - model_id: The transcription model to use\n    - audio_format: Input audio format (PCM16 recommended)\n    - commit_strategy: \"manual\" or \"vad\" (voice activity detection)\n    - include_timestamps: Get word-level timing information\n    - include_language_detection: Detect the spoken language",
+      "namespace": "elevenlabs.speech_to_text",
+      "node_type": "elevenlabs.speech_to_text.RealtimeSpeechToText",
+      "properties": [
+        {
+          "name": "chunk",
+          "type": {
+            "type": "chunk"
+          },
+          "default": {
+            "type": "chunk",
+            "node_id": null,
+            "thread_id": null,
+            "workflow_id": null,
+            "content_type": "text",
+            "content": "",
+            "content_metadata": {},
+            "done": false,
+            "thinking": false
+          },
+          "title": "Chunk",
+          "description": "Audio chunk input stream. Expects base64-encoded audio data with metadata."
+        },
+        {
+          "name": "model_id",
+          "type": {
+            "type": "enum",
+            "values": [
+              "scribe_v1",
+              "scribe_v2"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.speech_to_text.ModelIDEnum"
+          },
+          "default": "scribe_v2",
+          "title": "Model Id",
+          "description": "Model ID to use for transcription."
+        },
+        {
+          "name": "language_code",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Language Code",
+          "description": "Language code (ISO 639-1 or ISO 639-3). Leave empty for auto-detection."
+        },
+        {
+          "name": "commit_strategy",
+          "type": {
+            "type": "enum",
+            "values": [
+              "manual",
+              "vad"
+            ],
+            "type_name": "nodetool.nodes.elevenlabs.speech_to_text.CommitStrategyEnum"
+          },
+          "default": "vad",
+          "title": "Commit Strategy",
+          "description": "Strategy for committing transcriptions: manual or voice activity detection (VAD)."
+        },
+        {
+          "name": "include_timestamps",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Include Timestamps",
+          "description": "Include word-level timestamps in the transcription."
+        },
+        {
+          "name": "include_language_detection",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Include Language Detection",
+          "description": "Include language detection in the transcription."
+        },
+        {
+          "name": "vad_silence_threshold_secs",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.5,
+          "title": "Vad Silence Threshold Secs",
+          "description": "Silence threshold in seconds for VAD mode."
+        },
+        {
+          "name": "vad_threshold",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.4,
+          "title": "Vad Threshold",
+          "description": "Threshold for voice activity detection."
+        },
+        {
+          "name": "min_speech_duration_ms",
+          "type": {
+            "type": "int"
+          },
+          "default": 100,
+          "title": "Min Speech Duration Ms",
+          "description": "Minimum speech duration in milliseconds."
+        },
+        {
+          "name": "min_silence_duration_ms",
+          "type": {
+            "type": "int"
+          },
+          "default": 100,
+          "title": "Min Silence Duration Ms",
+          "description": "Minimum silence duration in milliseconds."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "chunk"
+          },
+          "name": "chunk"
+        }
+      ],
+      "basic_fields": [
+        "chunk",
+        "model_id",
+        "language_code",
+        "commit_strategy",
+        "include_timestamps",
+        "include_language_detection",
+        "vad_silence_threshold_secs",
+        "vad_threshold",
+        "min_speech_duration_ms",
+        "min_silence_duration_ms"
+      ]
+    },
+    {
       "title": "Realtime Text To Speech",
       "description": "Stream text-to-speech using ElevenLabs WebSocket API. Consumes text chunks and outputs audio chunks in real-time.\n    audio, tts, speech, streaming, realtime, websocket\n\n    Use cases:\n    - Real-time voice generation from streaming text\n    - Interactive voice applications\n    - Low-latency text-to-speech conversion\n    - Streaming dialogue generation",
       "namespace": "elevenlabs.text_to_speech",
@@ -309,7 +447,7 @@
           "type": {
             "type": "dict"
           },
-          "default": null,
+          "default": {},
           "title": "Voice Settings",
           "description": "Optional voice settings to override defaults"
         },

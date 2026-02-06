@@ -540,7 +540,7 @@ class RealtimeTextToSpeech(BaseNode):
                 init_message = {
                     "text": " ",  # Must be a single space for initialization
                     "voice_settings": voice_settings,
-                    "xi_api_key": api_key,  # API key is also required in the first frame
+                    # "xi_api_key": api_key,  # API key is also required in the first frame
                 }
 
                 log.debug("Sending initialization message")
